@@ -12,7 +12,15 @@ const db = require('./services/db');
 
 // Create a route for root - /
 app.get("/", function(req, res) {
+
     res.send("Hello world!");
+
+  res.send(`
+    <h1>Study Circle</h1>
+    <h3>Peer-to-Peer Study Support Platform</h3>
+    <p>Students can offer and book academic support sessions.</p>
+  `);
+
 });
 
 // Create a route for testing the db
@@ -28,7 +36,11 @@ app.get("/db_test", function(req, res) {
 // Create a route for /goodbye
 // Responds to a 'GET' request
 app.get("/goodbye", function(req, res) {
+
     res.send("Goodbye world!");
+
+    res.send("Goodbye Study Circle!");
+
 });
 
 // Create a dynamic route for /hello/<name>, where name is any value provided by user
