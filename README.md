@@ -55,4 +55,12 @@ Once in the database container, you can get a MySQL CLI in the usual way
 
 ```bash
 mysql -uroot -p<password> 
+
+## Ilhan Contrubution 
+
+-Set up Docker environment
+- Configurated Git
+-Working on Kanban Board
+
+
 ```
