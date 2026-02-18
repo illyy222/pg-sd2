@@ -56,5 +56,5 @@ Full execution instructions will be finalised in later sprints.
 ## Project Management
 This project is managed using GitHub Projects with a Kanban board to track tasks and sprint progress.
 
-GitHub Repository Link: <PASTE LINK HERE>
-Kanban Board Link: <PASTE PROJECT LINK HERE>
+
+Kanban Board Link: <https://github.com/users/illyy222/projects/2/views/3>
