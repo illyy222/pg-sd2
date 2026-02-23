@@ -1,59 +1,96 @@
 # Study Circle
 
-## Project Description
+Study Circle is a peer-to-peer study support platform developed for our Software Engineering coursework. The aim of the system is to connect students who are struggling academically with other students who feel confident in certain subjects and are willing to offer help.
 
-Study Circle is a peer-to-peer study support platform created for our Software Engineering coursework.
-The idea behind the system is to connect students who are struggling academically with other students who are confident in certain subjects and willing to help. Many students cannot afford private tutoring, so this platform is designed to create a supportive academic community within the university.
-For Sprint 1, our focus has been on planning and documentation, setting up our collaboration tools, and preparing the development environment using GitHub and Docker.b
+Many students cannot afford private tutoring, so this platform is designed to create a supportive academic community within the university.
 
+---
+
+## Sprint 1 – Planning & Setup
+
+In Sprint 1, we focused on setting up the project properly and making sure everyone could collaborate effectively.
+
+This included:
+- Refining the project idea
+- Creating a Code of Conduct
+- Developing personas
+- Identifying ethical considerations
+- Setting up our GitHub repository
+- Creating a Kanban board
+- Configuring the Docker development environment
+
+---
+
+## Sprint 2 – Requirements & System Design
+
+In Sprint 2, we focused on defining what the system should do before starting development.
+
+This included:
+- Writing user stories to define key features
+- Creating a Use Case Diagram
+- Designing wireframes for the interface
+- Producing activity diagrams to model system flow
+
+These design artefacts help guide the next stage of development.
+
+---
+
+## Platform Features
 
 The platform will allow students to:
+
 - Request help in specific subjects
-- Offer support in areas they are confident in
-- Connect with peers in a safe and organised way
-
-
+- Offer support in subjects they are confident in
+- Browse available study sessions
+- Book and manage sessions
+- Connect with other students in a structured and supportive way
 
 ---
 
 ## Team Members
-- Sabrin Sa
-- Huda Abi
-- Ilhan Mohamed
-- Amina Adan
+
+- Sabrin Sa  
+- Huda Abi  
+- Ilhan Mohamed  
+- Amina Adan  
 
 ---
 
 ## Technology Stack
-- Java
-- MySQL
-- Docker
-- GitHub
 
-Additional tools and frameworks will be introduced in later sprints.
+Frontend:
+- HTML
+- CSS
+- JavaScript
+- PUG templating engine
+
+Backend:
+- Node.js
+- Express.js
+- MySQL
+
+DevOps & Version Control:
+- Docker
+- Git
+- GitHub
 
 ---
 
 ## Project Structure
-```
-/src        - Application source code
-/docs       - Project documentation
-/database   - SQL scripts
-/docker     - Docker configuration files
-```
+
+/src        - Application source code  
+/docs       - Project documentation  
+/database   - SQL scripts  
+/docker     - Docker configuration files  
 
 ---
 
 ## Development Environment
-The system will use Docker to containerise the application and database environment.
 
-Database initialisation scripts are provided in the `/database` folder.
-
-Full execution instructions will be finalised in later sprints.
+The application uses Docker to containerise both the web application and the database to ensure a consistent development environment across the team.
 
 ---
 
 ## Project Management
-This project is managed using GitHub Projects with a Kanban board to track tasks and sprint progress.
 
-
+The project is managed using GitHub Projects and a Kanban board to track sprint tasks and team contributions.
