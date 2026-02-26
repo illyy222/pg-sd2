@@ -1,6 +1,6 @@
 # Study Circle
 
-Study Circle is a peer-to-peer study support platform developed for our Software Engineering coursework. The aim of the system is to connect students who are struggling academically with other students who feel confident in certain subjects and are willing to offer help.
+Study Circle is a peer-to-peer study aid designed for our education in software engineering. Through the system, students who are having academic difficulties can connect with other students who are prepared to help and who are confident in particular areas.
 
 Many students cannot afford private tutoring, so this platform is designed to create a supportive academic community within the university.
 
