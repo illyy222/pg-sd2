@@ -35,6 +35,21 @@ These design artefacts help guide the next stage of development.
 
 ---
 
+## Sprint 3 
+
+In Sprint 3, we focused on building the core features, connecting the database, and displaying data on the main pages.
+
+This included:
+- Setting up Docker for the development environment
+- Creating and connecting the MySQL database
+- Building pages using Express and PUG
+- Users list and user profile pages
+- Listings and detail pages
+- Tags/categories functionality
+- Displaying real data from the database
+
+---
+
 ## Platform Features
 
 The platform will allow students to:
