@@ -1,60 +1,80 @@
-// Import express.js
+// Import express
 const express = require("express");
+
+// Import Models
+const TestModel = require("./models/TestModel");
+const UserModel = require("./models/UserModel");
 
 // Create express app
 var app = express();
 
+app.set("view engine", "pug");
+app.set("views", __dirname + "/views");
+
 // Add static files location
 app.use(express.static("static"));
 
-// Get the functions in the db.js file to use
+// Get database functions
 const db = require('./services/db');
 
-// Create a route for root - /
+// Home route
 app.get("/", function(req, res) {
-
-    res.send("Hello world!");
-
-  res.send(`
-    <h1>Study Circle</h1>
-    <h3>Peer-to-Peer Study Support Platform</h3>
-    <p>Students can offer and book academic support sessions.</p>
-  `);
-
+res.render("index");
 });
 
-// Create a route for testing the db
-app.get("/db_test", function(req, res) {
-    // Assumes a table called test_table exists in your database
-    sql = 'select * from test_table';
-    db.query(sql).then(results => {
-        console.log(results);
-        res.send(results)
-    });
+// DB test route
+app.get("/db_test", async function(req, res) {
+try {
+const results = await TestModel.getAll();
+console.log(results);
+res.render("db_test", { results });
+} catch(err) {
+console.error(err);
+res.status(500).send("Database error");
+}
 });
 
-// Create a route for /goodbye
-// Responds to a 'GET' request
+// ✅ USERS LIST ROUTE
+app.get("/users", async function(req, res) {
+try {
+const users = await UserModel.getAll();
+res.render("users", { users: users });
+} catch (err) {
+console.error(err);
+res.status(500).send("Database error");
+}
+});
+
+// ✅ USER PROFILE ROUTE 
+app.get("/users/:id", async function(req, res) {
+try {
+const user = await UserModel.getById(req.params.id);
+
+if (!user) {
+return res.status(404).send("User not found");
+}
+
+res.render("profile", { user: user });
+
+} catch (err) {
+console.error(err);
+res.status(500).send("Database error");
+}
+});
+
+// Goodbye route
 app.get("/goodbye", function(req, res) {
-
-    res.send("Goodbye world!");
-
-    res.send("Goodbye Study Circle!");
-
+res.send("Goodbye Study Circle!");
 });
 
-// Create a dynamic route for /hello/<name>, where name is any value provided by user
-// At the end of the URL
-// Responds to a 'GET' request
+// Dynamic hello route
 app.get("/hello/:name", function(req, res) {
-    // req.params contains any parameters in the request
-    // We can examine it in the console for debugging purposes
-    console.log(req.params);
-    //  Retrieve the 'name' parameter and use it in a dynamically generated page
-    res.send("Hello " + req.params.name);
+console.log(req.params);
+res.send("Hello " + req.params.name);
 });
 
-// Start server on port 3000
+// Start server
 app.listen(3000,function(){
-    console.log(`Server running at http://127.0.0.1:3000/`);
+console.log(`Server running at http://127.0.0.1:3000/`);
 });
+
