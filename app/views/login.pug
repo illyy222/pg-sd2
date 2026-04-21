@@ -1,0 +1,26 @@
+//- # LOGIN PAGE
+doctype html
+html
+  head
+    title Login
+    link(rel="stylesheet", href="/style.css")
+
+  body
+    h1 💗 Login to Study Circle
+
+    .card
+      form(method="POST" action="/login")
+        label(for="user_id") Select User:
+        br
+        br
+
+        select(name="user_id" required)
+          each user in users
+            option(value=user.id)= user.name
+
+        br
+        br
+
+        button(type="submit") Login
+
+        

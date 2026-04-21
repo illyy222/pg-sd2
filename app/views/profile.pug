@@ -1,12 +1,20 @@
+//- # USER PROFILE PAGE
 doctype html
 html
   head
-    title User Profile
+    title Profile
+    link(rel="stylesheet", href="/style.css")
+
   body
-    h1= user.name
-    p Email: #{user.email}
+    .card
+      //- # USER NAME
+      h1 👤 #{user.name}
 
-    br
-    a(href="/users") Back to users
+      //- # USER EMAIL (if exists)
+      p 📧 #{user.email}
 
+      br
+      a(href="/users") ⬅ Back to users
+
+      
     

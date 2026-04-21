@@ -1,15 +1,23 @@
+//- # USERS LIST PAGE
 doctype html
 html
   head
     title Users
-  body
-    h1 Users List
+    link(rel="stylesheet", href="/style.css")
 
-    if users.length === 0
-      p No users found.
-    else
-      ul
-        each user in users
-          li
-            a(href=`/users/${user.id}`)= user.name
-            
+  body
+    h1 👩‍🎓 Users
+
+    //- # LOOP THROUGH USERS
+    each user in users
+      .card
+        //- # USER NAME
+        p #{user.name}
+
+        //- # LINK TO PROFILE PAGE
+        a(href=`/users/${user.id}`) View Profile
+
+    br
+    a(href="/") ⬅ Back Home
+
+    

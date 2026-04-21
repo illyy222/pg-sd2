@@ -1,32 +1,25 @@
+//- # HOME PAGE
 doctype html
 html
   head
     title Study Circle
-    style.
-      body {
-        font-family: Arial;
-        padding: 20px;
-      }
-      h1 {
-        color: #333;
-      }
-      a {
-        display: block;
-        margin: 10px 0;
-        color: blue;
-        text-decoration: none;
-        font-size: 18px;
-      }
+    link(rel="stylesheet", href="/style.css")
 
   body
-    h1 Study Circle
+    h1 💗 Study Circle
 
-    h2 Peer-to-Peer Study Support Platform
+    if user
+      p 👋 Welcome #{user.name}
+      p
+        a(href="/logout") Logout
 
-    p Students can offer and book academic support sessions.
+    .card
+      a(href="/users") 👩‍🎓 View Users
 
-    a(href="/users") View Users
-    a(href="/db_test") Database Test
-    a(href="/goodbye") Test Goodbye Route
+    .card
+      a(href="/sessions") 📚 Study Sessions
 
-    
+    .card
+      a(href="/messages") 💬 Messages
+
+      

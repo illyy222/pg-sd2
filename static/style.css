@@ -1,0 +1,121 @@
+/* 🌸 PAGE BACKGROUND */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(to right, #ffe4ec, #fff5f8);
+  padding: 30px;
+  color: #333;
+  margin: 0;
+}
+
+/* 💗 MAIN TITLES */
+h1 {
+  text-align: center;
+  color: #d63384;
+  font-size: 2.7rem;
+  margin-bottom: 10px;
+}
+
+h2 {
+  text-align: center;
+  color: #ff66a3;
+  margin-bottom: 20px;
+}
+
+/* 🌸 GENERAL PARAGRAPHS */
+p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ✨ CARD STYLE */
+.card {
+  background: #f2f2f2;
+  padding: 25px;
+  margin: 22px auto;
+  border-radius: 22px;
+  width: 78%;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 💅 CARD HOVER */
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* 🎀 LINKS AS BUTTONS */
+a {
+  text-decoration: none;
+  color: white;
+  background: #f45b9b;
+  padding: 12px 22px;
+  border-radius: 14px;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+/* 💖 LINK HOVER */
+a:hover {
+  background: #dd4e89;
+}
+
+/* 📝 FORM FIELDS */
+select,
+textarea,
+button,
+input {
+  width: 80%;
+  max-width: 500px;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+/* 💬 TEXTAREA */
+textarea {
+  resize: vertical;
+}
+
+/* 🌸 BUTTON */
+button {
+  background: #f45b9b;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* 🌸 BUTTON HOVER */
+button:hover {
+  background: #dd4e89;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+  .card {
+    width: 92%;
+    padding: 18px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  select,
+  textarea,
+  button,
+  input {
+    width: 95%;
+  }
+}
+
+
