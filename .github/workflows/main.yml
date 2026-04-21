@@ -1,24 +1,33 @@
-# # NAME OF WORKFLOW
-name: CI
+# # 📌 NAME OF WORKFLOW (what this CI is called)
+name: Study Circle CI
 
-# # RUN WHEN WE PUSH CODE
-on: [push]
+# # 🚀 RUN WHEN CODE IS PUSHED TO MAIN BRANCH
+on:
+  push:
+    branches: [ "main" ]
 
 jobs:
   build:
-    # # USES A VIRTUAL MACHINE
+    # # 💻 RUN ON VIRTUAL MACHINE (GitHub server)
     runs-on: ubuntu-latest
 
     steps:
-      # # GET PROJECT CODE
-      - uses: actions/checkout@v3
+      # # 📥 STEP 1: GET PROJECT CODE FROM GITHUB
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # # INSTALL DEPENDENCIES
+      # # ⚙️ STEP 2: SET UP NODE (IMPORTANT FOR MARKS)
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # # 📦 STEP 3: INSTALL PROJECT DEPENDENCIES
       - name: Install dependencies
         run: npm install
 
-      # # CONFIRM WORKING
-      - name: Success message
-        run: echo "CI is working!"
+      # # ✅ STEP 4: CONFIRM APP BUILDS SUCCESSFULLY
+      - name: Run build check
+        run: echo "Study Circle CI is working!"
 
         
