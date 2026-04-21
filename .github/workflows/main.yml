@@ -1,0 +1,24 @@
+# # NAME OF WORKFLOW
+name: CI
+
+# # RUN WHEN WE PUSH CODE
+on: [push]
+
+jobs:
+  build:
+    # # USES A VIRTUAL MACHINE
+    runs-on: ubuntu-latest
+
+    steps:
+      # # GET PROJECT CODE
+      - uses: actions/checkout@v3
+
+      # # INSTALL DEPENDENCIES
+      - name: Install dependencies
+        run: npm install
+
+      # # CONFIRM WORKING
+      - name: Success message
+        run: echo "CI is working!"
+
+        
