@@ -1,34 +1,33 @@
-//- # USERS LIST PAGE
+//- # USERS PAGE
 doctype html
 html
   head
-    //- # PAGE TITLE (shown in browser tab)
-    title Users
+    //- # PAGE TITLE
+    title Study Partners
 
     //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- # MAIN PAGE HEADING
+    //- # MAIN HEADING
     h1 👩‍🎓 Study Partners
 
-    //- # PRIVACY NOTE (ethical feature)
+    //- # ETHICAL PRIVACY NOTE
     p This page only shows basic user information for study support purposes.
 
-    //- # LOOP THROUGH ALL USERS FROM DATABASE
+    //- # LOOP THROUGH ALL USERS
     each user in users
-
-      //- # CARD FOR EACH USER
       .card
-        //- # DISPLAY USER NAME
+        //- # SHOW USER NAME
         p #{user.name}
 
-        //- # LINK TO USER PROFILE PAGE (dynamic ID)
+        //- # SHOW WHAT USER IS GOOD AT
+        p 🧠 Good at: #{user.skills}
+
+        //- # LINK TO USER PROFILE
         a(href=`/users/${user.id}`) View Profile
 
     //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
     
-
-

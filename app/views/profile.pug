@@ -1,24 +1,36 @@
-//- # USER PROFILE PAGE
+//- # PROFILE PAGE
 doctype html
 html
   head
-    title Profile
+    //- # PAGE TITLE
+    title User Profile
+
+    //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
     .card
-      //- # USER NAME
+      //- # SHOW USER NAME
       h1 👤 #{user.name}
 
-      //- # SHOW EMAIL ONLY IF IT EXISTS
+      //- # SHOW EMAIL IF IT EXISTS
       if user.email
         p 📧 #{user.email}
 
-      br
+      //- # SHOW USER SKILLS
+      p 🧠 Good at: #{user.skills}
+
+      //- # ETHICAL PRIVACY NOTE
+      p Only relevant academic information is shown to protect user privacy.
+
+      //- # EXPLANATION OF PURPOSE
+      p This helps other users understand what kind of study support this student can provide.
 
       //- # BACK BUTTON
-      a(href="/users") ⬅ Back to users
+      br
+      a(href="/users") ⬅ Back to Study Partners
       
+
 
 
     

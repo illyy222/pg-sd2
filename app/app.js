@@ -1,27 +1,26 @@
 // # IMPORT EXPRESS
-// Express is used to create the web server and handle routes
+// Express is used to create the server and handle routes
 const express = require("express");
 
 // # IMPORT MODELS
-// These files contain functions to interact with the database
+// These files help us get data from the database
 const TestModel = require("./models/TestModel");
 const UserModel = require("./models/UserModel");
 
 // # CREATE EXPRESS APP
-// This is your main application
 const app = express();
 
 
 // ======================================
-// # SETUP VIEW ENGINE
+// # VIEW ENGINE SETUP
 // ======================================
 
-// # SET TEMPLATE ENGINE TO PUG
-// Allows us to use .pug files to render HTML pages
+// # SET PUG AS THE TEMPLATE ENGINE
+// This lets us render .pug files in the browser
 app.set("view engine", "pug");
 
-// # SET VIEWS FOLDER LOCATION
-// Tells Express where your .pug files are stored
+// # SET THE VIEWS FOLDER
+// This tells Express where the .pug files are stored
 app.set("views", __dirname + "/views");
 
 
@@ -29,28 +28,28 @@ app.set("views", __dirname + "/views");
 // # MIDDLEWARE
 // ======================================
 
-// # STATIC FILES
-// Allows CSS and images from /static folder
+// # USE STATIC FILES
+// This allows CSS files from the static folder to work
 app.use(express.static("static"));
 
-// # FORM DATA PARSER
-// Lets us read data sent from forms (POST requests)
+// # READ FORM DATA
+// This allows us to get form input from POST requests
 app.use(express.urlencoded({ extended: true }));
 
 
 // ======================================
-// # SESSION MANAGEMENT
+// # SESSION SETUP
 // ======================================
 
-// # IMPORT SESSION LIBRARY
+// # IMPORT EXPRESS-SESSION
+// This is used to remember which user is logged in
 const session = require("express-session");
 
 // # ENABLE SESSIONS
-// Used to store logged-in user information
 app.use(session({
-  secret: "studycircle",   // secret key (can be anything)
-  resave: false,           // don't save if unchanged
-  saveUninitialized: true  // save new sessions
+  secret: "studycircle",   // # SECRET KEY FOR SESSION
+  resave: false,           // # DON'T SAVE SESSION IF NOTHING CHANGED
+  saveUninitialized: true  // # SAVE NEW SESSION
 }));
 
 
@@ -66,25 +65,21 @@ const db = require("./services/db");
 // # HOME PAGE ROUTE
 // ======================================
 
-// # GET REQUEST FOR HOME PAGE "/"
+// # HOME PAGE
+// This route shows the main page if user is logged in
 app.get("/", async function(req, res) {
   try {
-
-    // # CHECK IF USER IS LOGGED IN (SESSION EXISTS)
+    // # CHECK IF USER IS LOGGED IN
     if (req.session.user_id) {
-
-      // # GET USER FROM DATABASE USING ID
+      // # GET LOGGED-IN USER DETAILS FROM DATABASE
       const user = await UserModel.getById(req.session.user_id);
 
       // # RENDER HOME PAGE AND PASS USER DATA
       res.render("index", { user });
-
     } else {
-
-      // # IF NOT LOGGED IN → REDIRECT TO LOGIN
+      // # IF NOT LOGGED IN, SEND USER TO LOGIN PAGE
       res.redirect("/login");
     }
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -97,28 +92,27 @@ app.get("/", async function(req, res) {
 // ======================================
 
 // # SHOW LOGIN PAGE
+// This gets all users so they can pick a user to log in as
 app.get("/login", async function(req, res) {
   try {
-
     // # GET ALL USERS FROM DATABASE
     const users = await UserModel.getAll();
 
-    // # RENDER LOGIN PAGE WITH USERS LIST
+    // # RENDER LOGIN PAGE
     res.render("login", { users });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
   }
 });
 
-// # HANDLE LOGIN FORM SUBMISSION
+// # HANDLE LOGIN FORM
+// This saves selected user ID into session
 app.post("/login", function(req, res) {
-
-  // # GET USER ID FROM FORM
+  // # GET SELECTED USER ID FROM FORM
   const userId = req.body.user_id;
 
-  // # SAVE USER ID IN SESSION
+  // # STORE USER ID IN SESSION
   req.session.user_id = userId;
 
   // # REDIRECT TO HOME PAGE
@@ -126,9 +120,9 @@ app.post("/login", function(req, res) {
 });
 
 // # LOGOUT ROUTE
+// This removes the session and logs the user out
 app.get("/logout", function(req, res) {
-
-  // # DESTROY SESSION (LOG OUT USER)
+  // # DESTROY SESSION
   req.session.destroy();
 
   // # REDIRECT TO LOGIN PAGE
@@ -140,16 +134,15 @@ app.get("/logout", function(req, res) {
 // # DATABASE TEST ROUTE
 // ======================================
 
-// # TEST IF DATABASE CONNECTION WORKS
+// # TEST DATABASE CONNECTION
+// This shows if the database is working
 app.get("/db_test", async function(req, res) {
   try {
-
-    // # GET TEST DATA FROM DATABASE
+    // # GET TEST DATA
     const results = await TestModel.getAll();
 
-    // # DISPLAY RESULTS
+    // # SHOW RESULTS ON PAGE
     res.render("db_test", { results });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -162,15 +155,14 @@ app.get("/db_test", async function(req, res) {
 // ======================================
 
 // # SHOW ALL USERS
+// This displays all users from the database
 app.get("/users", async function(req, res) {
   try {
-
     // # GET USERS FROM DATABASE
     const users = await UserModel.getAll();
 
     // # RENDER USERS PAGE
     res.render("users", { users });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -178,20 +170,19 @@ app.get("/users", async function(req, res) {
 });
 
 // # SHOW SINGLE USER PROFILE
+// This shows one user profile based on the ID in the URL
 app.get("/users/:id", async function(req, res) {
   try {
-
-    // # GET USER BY ID FROM URL
+    // # GET USER BY ID
     const user = await UserModel.getById(req.params.id);
 
-    // # CHECK IF USER EXISTS
+    // # IF USER DOESN'T EXIST, SHOW ERROR
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    // # SHOW PROFILE PAGE
+    // # RENDER PROFILE PAGE
     res.render("profile", { user });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -200,14 +191,13 @@ app.get("/users/:id", async function(req, res) {
 
 
 // ======================================
-// # STUDY SESSIONS ROUTES
+// # STUDY SESSION ROUTES
 // ======================================
 
-// # SHOW ALL SESSIONS
+// # SHOW ALL STUDY SESSIONS
 app.get("/sessions", async function(req, res) {
   try {
-
-    // # SQL QUERY TO JOIN SESSIONS + CATEGORIES
+    // # SQL QUERY TO GET SESSION DETAILS + CATEGORY NAME
     const sql = `
       SELECT sessions.id, sessions.title, sessions.rating, categories.name AS category
       FROM sessions
@@ -217,19 +207,18 @@ app.get("/sessions", async function(req, res) {
     // # RUN QUERY
     const sessions = await db.query(sql);
 
-    // # RENDER PAGE
+    // # RENDER SESSIONS PAGE
     res.render("sessions", { sessions });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
   }
 });
 
-// # SHOW SINGLE SESSION
+// # SHOW ONE STUDY SESSION
 app.get("/sessions/:id", async function(req, res) {
   try {
-
+    // # SQL QUERY TO GET ONE SESSION BY ID
     const sql = `
       SELECT sessions.title, sessions.rating, sessions.description, categories.name AS category
       FROM sessions
@@ -237,18 +226,19 @@ app.get("/sessions/:id", async function(req, res) {
       WHERE sessions.id = ?
     `;
 
-    // # RUN QUERY WITH ID
+    // # RUN QUERY WITH SESSION ID
     const result = await db.query(sql, [req.params.id]);
 
     // # GET FIRST RESULT
     const session = result[0];
 
+    // # IF SESSION DOESN'T EXIST, SHOW ERROR
     if (!session) {
       return res.status(404).send("Session not found");
     }
 
+    // # RENDER SESSION PAGE
     res.render("session", { session });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -257,13 +247,14 @@ app.get("/sessions/:id", async function(req, res) {
 
 
 // ======================================
-// # MESSAGING ROUTES
+// # MESSAGE ROUTES
 // ======================================
 
-// # SHOW ALL MESSAGES
+// # SHOW MESSAGES PAGE
+// This page shows all saved messages and the form to send a message
 app.get("/messages", async function(req, res) {
   try {
-
+    // # SQL QUERY TO GET MESSAGES WITH SENDER AND RECEIVER NAMES
     const sql = `
       SELECT 
         messages.id,
@@ -276,49 +267,48 @@ app.get("/messages", async function(req, res) {
       ORDER BY messages.id DESC
     `;
 
-    // # GET MESSAGES
+    // # GET ALL MESSAGES
     const messages = await db.query(sql);
 
-    // # GET USERS FOR DROPDOWN
+    // # GET ALL USERS FOR DROPDOWN MENUS
     const users = await UserModel.getAll();
 
-    // # SHOW PAGE
+    // # RENDER MESSAGES PAGE
     res.render("messages", { messages, users });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
   }
 });
 
-
-// # SEND MESSAGE
+// # HANDLE SEND MESSAGE FORM
 app.post("/messages", async function(req, res) {
   try {
-
+    // # GET FORM DATA
     const { sender_id, receiver_id, message_text } = req.body;
 
-    // # VALIDATION: EMPTY MESSAGE
+    // # ETHICAL VALIDATION: CHECK IF MESSAGE IS EMPTY
     if (!message_text || message_text.trim() === "") {
       return res.send("Message cannot be empty");
     }
 
-    // # VALIDATION: MESSAGE LENGTH
+    // # ETHICAL VALIDATION: CHECK MESSAGE LENGTH
+    // This helps reduce spam or misuse
     if (message_text.length > 200) {
       return res.send("Message too long");
     }
 
-    // # INSERT MESSAGE INTO DATABASE
+    // # SQL QUERY TO INSERT MESSAGE
     const sql = `
       INSERT INTO messages (sender_id, receiver_id, message_text)
       VALUES (?, ?, ?)
     `;
 
+    // # SAVE MESSAGE TO DATABASE
     await db.query(sql, [sender_id, receiver_id, message_text]);
 
     // # REDIRECT BACK TO MESSAGES PAGE
     res.redirect("/messages");
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -327,10 +317,10 @@ app.post("/messages", async function(req, res) {
 
 
 // ======================================
-// # SERVER START
+// # START SERVER
 // ======================================
 
-// # START SERVER ON PORT 3000
+// # RUN THE APP ON PORT 3000
 app.listen(3000, function() {
   console.log("Server running at http://127.0.0.1:3000/");
 });

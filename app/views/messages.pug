@@ -2,21 +2,30 @@
 doctype html
 html
   head
+    //- # PAGE TITLE
     title Messages
+
+    //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- # PAGE TITLE
+    //- # MAIN TITLE
     h1 💬 Messages
 
-    //- # ETHICAL NOTE (respectful communication)
+    //- # PURPOSE EXPLANATION
+    p Users can message each other after identifying relevant study support based on user skills.
+
+    //- # ETHICAL NOTE ABOUT RESPECTFUL BEHAVIOUR
     p Please use respectful communication when messaging other users.
 
-    //- # MESSAGE FORM SECTION
+    //- # ETHICAL NOTE ABOUT VALIDATION
+    p Messages are validated to help prevent spam or misuse.
+
+    //- # SEND MESSAGE FORM CARD
     .card
       h2 Send a Message
 
-      //- # FORM THAT SENDS DATA TO /messages (POST)
+      //- # FORM SENDS DATA TO /messages USING POST
       form(method="POST" action="/messages")
 
         //- # SENDER DROPDOWN
@@ -33,34 +42,34 @@ html
           label(for="receiver_id") To:
           br
           select(name="receiver_id" required)
+            //- # LOOP USERS FOR RECEIVER OPTIONS
             each user in users
               option(value=user.id)= user.name
 
-        //- # MESSAGE INPUT
+        //- # MESSAGE BOX
         p
           label(for="message_text") Message:
           br
           textarea(name="message_text" rows="4" cols="40" required)
 
-        //- # SUBMIT BUTTON
+        //- # SEND BUTTON
         br
         button(type="submit") Send Message
 
-    //- # DISPLAY ALL MESSAGES
+    //- # SHOW ALL SAVED MESSAGES
     each message in messages
-
-      //- # MESSAGE CARD
       .card
-        //- # SHOW WHO SENT TO WHO
+        //- # SHOW WHO SENT THE MESSAGE TO WHO
         p 💌 #{message.sender_name} → #{message.receiver_name}
 
-        //- # SHOW MESSAGE TEXT
+        //- # SHOW MESSAGE CONTENT
         p "#{message.message_text}"
 
     //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
     
+
 
 
 
