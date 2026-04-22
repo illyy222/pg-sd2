@@ -12,20 +12,20 @@ html
     //- # MAIN TITLE
     h1 💬 Messages
 
-    //- # PURPOSE EXPLANATION
+    //- # EXPLANATION TEXT
     p Users can message each other after identifying relevant study support based on user skills.
 
-    //- # ETHICAL NOTE ABOUT RESPECTFUL BEHAVIOUR
+    //- # ETHICAL NOTE ABOUT RESPECTFUL USE
     p Please use respectful communication when messaging other users.
 
     //- # ETHICAL NOTE ABOUT VALIDATION
     p Messages are validated to help prevent spam or misuse.
 
-    //- # SEND MESSAGE FORM CARD
+    //- # SEND MESSAGE FORM
     .card
       h2 Send a Message
 
-      //- # FORM SENDS DATA TO /messages USING POST
+      //- # FORM SENDS DATA TO /messages
       form(method="POST" action="/messages")
 
         //- # SENDER DROPDOWN
@@ -33,7 +33,6 @@ html
           label(for="sender_id") From:
           br
           select(name="sender_id" required)
-            //- # LOOP USERS FOR SENDER OPTIONS
             each user in users
               option(value=user.id)= user.name
 
@@ -42,7 +41,6 @@ html
           label(for="receiver_id") To:
           br
           select(name="receiver_id" required)
-            //- # LOOP USERS FOR RECEIVER OPTIONS
             each user in users
               option(value=user.id)= user.name
 
@@ -56,22 +54,16 @@ html
         br
         button(type="submit") Send Message
 
-    //- # SHOW ALL SAVED MESSAGES
+    //- # SHOW ALL MESSAGES
     each message in messages
       .card
-        //- # SHOW WHO SENT THE MESSAGE TO WHO
+        //- # SHOW WHO SENT TO WHO
         p 💌 #{message.sender_name} → #{message.receiver_name}
 
-        //- # SHOW MESSAGE CONTENT
+        //- # SHOW MESSAGE TEXT
         p "#{message.message_text}"
 
     //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
     
-
-
-
-
-
-

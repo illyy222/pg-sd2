@@ -9,10 +9,10 @@ html
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- # MAIN HEADING
+    //- # MAIN PAGE HEADING
     h1 👩‍🎓 Study Partners
 
-    //- # ETHICAL PRIVACY NOTE
+    //- # PRIVACY NOTE
     p This page only shows basic user information for study support purposes.
 
     //- # LOOP THROUGH ALL USERS
@@ -21,10 +21,10 @@ html
         //- # SHOW USER NAME
         p #{user.name}
 
-        //- # SHOW WHAT USER IS GOOD AT
+        //- # SHOW USER SKILLS
         p 🧠 Good at: #{user.skills}
 
-        //- # LINK TO USER PROFILE
+        //- # LINK TO PROFILE PAGE
         a(href=`/users/${user.id}`) View Profile
 
     //- # BACK BUTTON

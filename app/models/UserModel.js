@@ -1,7 +1,7 @@
 // # IMPORT DATABASE CONNECTION
 const db = require("../services/db");
 
-// # CREATE USER MODEL CLASS
+// # USER MODEL CLASS
 class UserModel {
 
   // # GET ALL USERS
@@ -13,7 +13,6 @@ class UserModel {
     const users = await db.query(sql);
 
     // # ADD SKILLS TO EACH USER
-    // This is a simple feature to show what each user is good at
     users.forEach(user => {
       if (user.name === "Ilhan Mohamed") {
         user.skills = "Referencing, Essay Structure, Study Support";
@@ -36,7 +35,7 @@ class UserModel {
       }
     });
 
-    // # RETURN USERS WITH SKILLS
+    // # RETURN USERS
     return users;
   }
 
@@ -51,7 +50,7 @@ class UserModel {
     // # GET FIRST RESULT
     const user = results[0];
 
-    // # ADD SKILLS TO THE USER
+    // # ADD SKILLS TO SINGLE USER
     if (user) {
       if (user.name === "Ilhan Mohamed") {
         user.skills = "Referencing, Essay Structure, Study Support";
@@ -74,7 +73,7 @@ class UserModel {
       }
     }
 
-    // # RETURN SINGLE USER
+    // # RETURN USER
     return user;
   }
 }

@@ -1,24 +1,27 @@
-//- # SESSIONS LIST PAGE
+//- # SESSIONS PAGE
 doctype html
 html
   head
+    //- # PAGE TITLE
     title Study Sessions
+
+    //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
+    //- # MAIN HEADING
     h1 📚 Study Sessions
 
-    //- # LOOP THROUGH SESSIONS
+    //- # LOOP THROUGH ALL SESSIONS
     each session in sessions
       .card
-
         //- # SESSION TITLE
         h2 #{session.title}
 
-        //- # CATEGORY
+        //- # SESSION CATEGORY
         p 💖 Category: #{session.category}
 
-        //- # DISPLAY RATING STARS
+        //- # SHOW CURRENT RATING
         if session.rating == 5
           p ⭐⭐⭐⭐⭐
         else if session.rating == 4
@@ -30,9 +33,10 @@ html
         else
           p ⭐
 
-        //- # LINK TO SESSION DETAILS
+        //- # LINK TO SESSION DETAILS PAGE
         a(href=`/sessions/${session.id}`) 🔍 View Details
 
+    //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
     

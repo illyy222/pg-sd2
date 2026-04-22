@@ -15,11 +15,11 @@ const app = express();
 // # VIEW ENGINE SETUP
 // ======================================
 
-// # SET PUG AS THE TEMPLATE ENGINE
-// This lets us render .pug files in the browser
+// # SET PUG AS TEMPLATE ENGINE
+// This allows us to render .pug files as pages
 app.set("view engine", "pug");
 
-// # SET THE VIEWS FOLDER
+// # SET VIEWS FOLDER
 // This tells Express where the .pug files are stored
 app.set("views", __dirname + "/views");
 
@@ -28,12 +28,12 @@ app.set("views", __dirname + "/views");
 // # MIDDLEWARE
 // ======================================
 
-// # USE STATIC FILES
-// This allows CSS files from the static folder to work
+// # STATIC FILES
+// Allows CSS files from the static folder to load
 app.use(express.static("static"));
 
-// # READ FORM DATA
-// This allows us to get form input from POST requests
+// # FORM DATA PARSER
+// Allows us to read data from forms
 app.use(express.urlencoded({ extended: true }));
 
 
@@ -41,15 +41,15 @@ app.use(express.urlencoded({ extended: true }));
 // # SESSION SETUP
 // ======================================
 
-// # IMPORT EXPRESS-SESSION
-// This is used to remember which user is logged in
+// # IMPORT SESSION LIBRARY
 const session = require("express-session");
 
 // # ENABLE SESSIONS
+// Used to remember which user is logged in
 app.use(session({
-  secret: "studycircle",   // # SECRET KEY FOR SESSION
-  resave: false,           // # DON'T SAVE SESSION IF NOTHING CHANGED
-  saveUninitialized: true  // # SAVE NEW SESSION
+  secret: "studycircle",
+  resave: false,
+  saveUninitialized: true
 }));
 
 
@@ -62,22 +62,22 @@ const db = require("./services/db");
 
 
 // ======================================
-// # HOME PAGE ROUTE
+// # HOME PAGE
 // ======================================
 
-// # HOME PAGE
-// This route shows the main page if user is logged in
+// # HOME ROUTE
+// Shows homepage only if user is logged in
 app.get("/", async function(req, res) {
   try {
     // # CHECK IF USER IS LOGGED IN
     if (req.session.user_id) {
-      // # GET LOGGED-IN USER DETAILS FROM DATABASE
+      // # GET USER DETAILS FROM DATABASE
       const user = await UserModel.getById(req.session.user_id);
 
-      // # RENDER HOME PAGE AND PASS USER DATA
+      // # RENDER HOME PAGE
       res.render("index", { user });
     } else {
-      // # IF NOT LOGGED IN, SEND USER TO LOGIN PAGE
+      // # IF NOT LOGGED IN, SEND TO LOGIN
       res.redirect("/login");
     }
   } catch (err) {
@@ -92,13 +92,12 @@ app.get("/", async function(req, res) {
 // ======================================
 
 // # SHOW LOGIN PAGE
-// This gets all users so they can pick a user to log in as
 app.get("/login", async function(req, res) {
   try {
-    // # GET ALL USERS FROM DATABASE
+    // # GET ALL USERS FOR LOGIN DROPDOWN
     const users = await UserModel.getAll();
 
-    // # RENDER LOGIN PAGE
+    // # SHOW LOGIN PAGE
     res.render("login", { users });
   } catch (err) {
     console.error(err);
@@ -107,12 +106,11 @@ app.get("/login", async function(req, res) {
 });
 
 // # HANDLE LOGIN FORM
-// This saves selected user ID into session
 app.post("/login", function(req, res) {
   // # GET SELECTED USER ID FROM FORM
   const userId = req.body.user_id;
 
-  // # STORE USER ID IN SESSION
+  // # SAVE USER ID IN SESSION
   req.session.user_id = userId;
 
   // # REDIRECT TO HOME PAGE
@@ -120,9 +118,8 @@ app.post("/login", function(req, res) {
 });
 
 // # LOGOUT ROUTE
-// This removes the session and logs the user out
 app.get("/logout", function(req, res) {
-  // # DESTROY SESSION
+  // # DESTROY SESSION TO LOG OUT USER
   req.session.destroy();
 
   // # REDIRECT TO LOGIN PAGE
@@ -131,17 +128,16 @@ app.get("/logout", function(req, res) {
 
 
 // ======================================
-// # DATABASE TEST ROUTE
+// # DATABASE TEST
 // ======================================
 
 // # TEST DATABASE CONNECTION
-// This shows if the database is working
 app.get("/db_test", async function(req, res) {
   try {
     // # GET TEST DATA
     const results = await TestModel.getAll();
 
-    // # SHOW RESULTS ON PAGE
+    // # SHOW RESULTS
     res.render("db_test", { results });
   } catch (err) {
     console.error(err);
@@ -155,10 +151,9 @@ app.get("/db_test", async function(req, res) {
 // ======================================
 
 // # SHOW ALL USERS
-// This displays all users from the database
 app.get("/users", async function(req, res) {
   try {
-    // # GET USERS FROM DATABASE
+    // # GET ALL USERS
     const users = await UserModel.getAll();
 
     // # RENDER USERS PAGE
@@ -170,13 +165,12 @@ app.get("/users", async function(req, res) {
 });
 
 // # SHOW SINGLE USER PROFILE
-// This shows one user profile based on the ID in the URL
 app.get("/users/:id", async function(req, res) {
   try {
-    // # GET USER BY ID
+    // # GET USER BY ID FROM URL
     const user = await UserModel.getById(req.params.id);
 
-    // # IF USER DOESN'T EXIST, SHOW ERROR
+    // # IF USER DOES NOT EXIST
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -197,7 +191,7 @@ app.get("/users/:id", async function(req, res) {
 // # SHOW ALL STUDY SESSIONS
 app.get("/sessions", async function(req, res) {
   try {
-    // # SQL QUERY TO GET SESSION DETAILS + CATEGORY NAME
+    // # SQL QUERY TO GET SESSIONS + CATEGORY
     const sql = `
       SELECT sessions.id, sessions.title, sessions.rating, categories.name AS category
       FROM sessions
@@ -215,30 +209,62 @@ app.get("/sessions", async function(req, res) {
   }
 });
 
-// # SHOW ONE STUDY SESSION
+// # SHOW ONE SESSION
 app.get("/sessions/:id", async function(req, res) {
   try {
     // # SQL QUERY TO GET ONE SESSION BY ID
     const sql = `
-      SELECT sessions.title, sessions.rating, sessions.description, categories.name AS category
+      SELECT sessions.id, sessions.title, sessions.rating, sessions.description, categories.name AS category
       FROM sessions
       JOIN categories ON sessions.category_id = categories.id
       WHERE sessions.id = ?
     `;
 
-    // # RUN QUERY WITH SESSION ID
+    // # RUN QUERY USING ID FROM URL
     const result = await db.query(sql, [req.params.id]);
 
     // # GET FIRST RESULT
     const session = result[0];
 
-    // # IF SESSION DOESN'T EXIST, SHOW ERROR
+    // # IF SESSION DOES NOT EXIST
     if (!session) {
       return res.status(404).send("Session not found");
     }
 
-    // # RENDER SESSION PAGE
+    // # RENDER SINGLE SESSION PAGE
     res.render("session", { session });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+
+// # HANDLE SESSION RATING FORM
+app.post("/sessions/:id/rate", async function(req, res) {
+  try {
+    // # GET SESSION ID FROM URL
+    const sessionId = req.params.id;
+
+    // # GET RATING FROM FORM
+    const rating = parseInt(req.body.rating);
+
+    // # VALIDATE RATING
+    // Must be between 1 and 5
+    if (!rating || rating < 1 || rating > 5) {
+      return res.send("Invalid rating");
+    }
+
+    // # UPDATE SESSION RATING IN DATABASE
+    const sql = `
+      UPDATE sessions
+      SET rating = ?
+      WHERE id = ?
+    `;
+
+    await db.query(sql, [rating, sessionId]);
+
+    // # REDIRECT BACK TO SESSION PAGE
+    res.redirect(`/sessions/${sessionId}`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
@@ -251,10 +277,9 @@ app.get("/sessions/:id", async function(req, res) {
 // ======================================
 
 // # SHOW MESSAGES PAGE
-// This page shows all saved messages and the form to send a message
 app.get("/messages", async function(req, res) {
   try {
-    // # SQL QUERY TO GET MESSAGES WITH SENDER AND RECEIVER NAMES
+    // # SQL QUERY TO GET MESSAGE DATA + USER NAMES
     const sql = `
       SELECT 
         messages.id,
@@ -270,7 +295,7 @@ app.get("/messages", async function(req, res) {
     // # GET ALL MESSAGES
     const messages = await db.query(sql);
 
-    // # GET ALL USERS FOR DROPDOWN MENUS
+    // # GET ALL USERS FOR DROPDOWNS
     const users = await UserModel.getAll();
 
     // # RENDER MESSAGES PAGE
@@ -287,12 +312,12 @@ app.post("/messages", async function(req, res) {
     // # GET FORM DATA
     const { sender_id, receiver_id, message_text } = req.body;
 
-    // # ETHICAL VALIDATION: CHECK IF MESSAGE IS EMPTY
+    // # VALIDATION: CHECK IF MESSAGE IS EMPTY
     if (!message_text || message_text.trim() === "") {
       return res.send("Message cannot be empty");
     }
 
-    // # ETHICAL VALIDATION: CHECK MESSAGE LENGTH
+    // # VALIDATION: CHECK IF MESSAGE IS TOO LONG
     // This helps reduce spam or misuse
     if (message_text.length > 200) {
       return res.send("Message too long");
@@ -320,8 +345,7 @@ app.post("/messages", async function(req, res) {
 // # START SERVER
 // ======================================
 
-// # RUN THE APP ON PORT 3000
+// # START APP ON PORT 3000
 app.listen(3000, function() {
   console.log("Server running at http://127.0.0.1:3000/");
 });
-

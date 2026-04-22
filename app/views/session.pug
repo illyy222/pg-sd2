@@ -2,23 +2,25 @@
 doctype html
 html
   head
+    //- # PAGE TITLE
     title Session Details
+
+    //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
     .card
-
       //- # SESSION TITLE
       h1 📚 #{session.title}
 
       //- # CATEGORY
       p 💖 Category: #{session.category}
 
-      //- # DESCRIPTION (IF EXISTS)
+      //- # DESCRIPTION IF IT EXISTS
       if session.description
         p #{session.description}
 
-      //- # RATING DISPLAY
+      //- # SHOW CURRENT RATING WITH STARS
       if session.rating == 5
         p ⭐⭐⭐⭐⭐
         p 💕 Excellent
@@ -35,11 +37,26 @@ html
         p ⭐
         p ❌ Poor
 
-      br
+      //- # SIMPLE RATING FORM
+      //- This allows users to submit a new rating
+      form(method="POST" action=`/sessions/${session.id}/rate`)
+        label(for="rating") Rate this session:
+        br
+        select(name="rating" required)
+          option(value="1") 1 Star
+          option(value="2") 2 Stars
+          option(value="3") 3 Stars
+          option(value="4") 4 Stars
+          option(value="5") 5 Stars
+        br
+        br
+        button(type="submit") Submit Rating
 
       //- # BACK BUTTON
+      br
       a(href="/sessions") ⬅ Back to Sessions
       
+
 
 
     
