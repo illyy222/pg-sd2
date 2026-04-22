@@ -2,22 +2,33 @@
 doctype html
 html
   head
+    //- # PAGE TITLE (shown in browser tab)
     title Users
+
+    //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
-    h1 👩‍🎓 Users
+    //- # MAIN PAGE HEADING
+    h1 👩‍🎓 Study Partners
 
-    //- # LOOP THROUGH USERS
+    //- # PRIVACY NOTE (ethical feature)
+    p This page only shows basic user information for study support purposes.
+
+    //- # LOOP THROUGH ALL USERS FROM DATABASE
     each user in users
+
+      //- # CARD FOR EACH USER
       .card
-        //- # USER NAME
+        //- # DISPLAY USER NAME
         p #{user.name}
 
-        //- # LINK TO PROFILE PAGE
+        //- # LINK TO USER PROFILE PAGE (dynamic ID)
         a(href=`/users/${user.id}`) View Profile
 
+    //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
-
     
+
+

@@ -3,23 +3,22 @@ doctype html
 html
   head
     title Study Sessions
-    //- # LINK CSS FOR STYLING
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- # PAGE TITLE
     h1 📚 Study Sessions
 
-    //- # LOOP THROUGH ALL SESSIONS FROM DATABASE
+    //- # LOOP THROUGH SESSIONS
     each session in sessions
       .card
+
         //- # SESSION TITLE
         h2 #{session.title}
 
         //- # CATEGORY
         p 💖 Category: #{session.category}
 
-        //- # ADVANCED RATING (STARS)
+        //- # DISPLAY RATING STARS
         if session.rating == 5
           p ⭐⭐⭐⭐⭐
         else if session.rating == 4
@@ -31,14 +30,13 @@ html
         else
           p ⭐
 
-        //- # VIEW DETAILS LINK (DYNAMIC ROUTE)
+        //- # LINK TO SESSION DETAILS
         a(href=`/sessions/${session.id}`) 🔍 View Details
 
     br
-
-    //- # BACK TO HOME
     a(href="/") ⬅ Back Home
     
+
 
 
 

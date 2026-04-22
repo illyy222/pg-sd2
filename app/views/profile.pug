@@ -10,11 +10,15 @@ html
       //- # USER NAME
       h1 👤 #{user.name}
 
-      //- # USER EMAIL (if exists)
-      p 📧 #{user.email}
+      //- # SHOW EMAIL ONLY IF IT EXISTS
+      if user.email
+        p 📧 #{user.email}
 
       br
-      a(href="/users") ⬅ Back to users
 
+      //- # BACK BUTTON
+      a(href="/users") ⬅ Back to users
       
+
+
     

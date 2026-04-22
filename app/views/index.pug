@@ -2,17 +2,32 @@
 doctype html
 html
   head
+    //- # PAGE TITLE
     title Study Circle
+
+    //- # CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
+    //- # MAIN TITLE
     h1 💗 Study Circle
 
+    //- # SUBTITLE
+    h2 Peer-to-Peer Study Support Platform
+
+    //- # IF USER IS LOGGED IN (SESSION)
     if user
-      p 👋 Welcome #{user.name}
-      p
+      //- # GREETING USER
+      p(style="text-align:center") 👋 Welcome #{user.name}
+
+      //- # LOGOUT BUTTON
+      p(style="text-align:center")
         a(href="/logout") Logout
 
+    //- # DESCRIPTION TEXT
+    p(style="text-align:center") Helping students connect and support each other 💫
+
+    //- # NAVIGATION CARDS
     .card
       a(href="/users") 👩‍🎓 View Users
 
@@ -20,6 +35,6 @@ html
       a(href="/sessions") 📚 Study Sessions
 
     .card
-      a(href="/messages") 💬 Messages
-
+      a(href="/messages") 💬 View Messages
       
+

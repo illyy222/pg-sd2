@@ -1,41 +1,36 @@
-//- # SINGLE SESSION DETAIL PAGE
+//- # SINGLE SESSION PAGE
 doctype html
 html
   head
-    //- # PAGE TITLE
     title Session Details
-
-    //- # LINK TO CSS FOR STYLING
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- # CARD CONTAINER (FOR STYLING)
     .card
 
-      //- # SESSION TITLE FROM DATABASE
+      //- # SESSION TITLE
       h1 📚 #{session.title}
 
-      //- # CATEGORY FROM DATABASE
+      //- # CATEGORY
       p 💖 Category: #{session.category}
 
-      //- # ADVANCED RATING SYSTEM
+      //- # DESCRIPTION (IF EXISTS)
+      if session.description
+        p #{session.description}
 
+      //- # RATING DISPLAY
       if session.rating == 5
         p ⭐⭐⭐⭐⭐
         p 💕 Excellent
-
       else if session.rating == 4
         p ⭐⭐⭐⭐
         p 💗 Very Good
-
       else if session.rating == 3
         p ⭐⭐⭐
         p 👍 Good
-
       else if session.rating == 2
         p ⭐⭐
         p ⚠️ Needs Improvement
-
       else
         p ⭐
         p ❌ Poor
@@ -45,6 +40,7 @@ html
       //- # BACK BUTTON
       a(href="/sessions") ⬅ Back to Sessions
       
+
 
     
     

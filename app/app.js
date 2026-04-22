@@ -1,224 +1,337 @@
 // # IMPORT EXPRESS
-// This lets us create the web server and routes
+// Express is used to create the web server and handle routes
 const express = require("express");
 
 // # IMPORT MODELS
-// These get data from the database
+// These files contain functions to interact with the database
 const TestModel = require("./models/TestModel");
 const UserModel = require("./models/UserModel");
 
-// # CREATE APP
-// This is the main app we use to build everything
-var app = express();
+// # CREATE EXPRESS APP
+// This is your main application
+const app = express();
 
-// # SET PUG VIEW ENGINE
-// Allows us to use .pug files for frontend
+
+// ======================================
+// # SETUP VIEW ENGINE
+// ======================================
+
+// # SET TEMPLATE ENGINE TO PUG
+// Allows us to use .pug files to render HTML pages
 app.set("view engine", "pug");
 
-// # SET VIEWS FOLDER
-// Tells Express where our pug files are
+// # SET VIEWS FOLDER LOCATION
+// Tells Express where your .pug files are stored
 app.set("views", __dirname + "/views");
 
+
+// ======================================
+// # MIDDLEWARE
+// ======================================
+
 // # STATIC FILES
-// Allows us to use CSS (style.css)
+// Allows CSS and images from /static folder
 app.use(express.static("static"));
 
-// # READ FORM DATA
-// Needed to get data from forms (login/messages)
+// # FORM DATA PARSER
+// Lets us read data sent from forms (POST requests)
 app.use(express.urlencoded({ extended: true }));
 
-// # SESSION SETUP (LOGIN SYSTEM)
-// This stores user info temporarily (like who is logged in)
+
+// ======================================
+// # SESSION MANAGEMENT
+// ======================================
+
+// # IMPORT SESSION LIBRARY
 const session = require("express-session");
+
+// # ENABLE SESSIONS
+// Used to store logged-in user information
 app.use(session({
-  secret: "studycircle", // random key for security
-  resave: false,
-  saveUninitialized: true
+  secret: "studycircle",   // secret key (can be anything)
+  resave: false,           // don't save if unchanged
+  saveUninitialized: true  // save new sessions
 }));
 
+
+// ======================================
 // # DATABASE CONNECTION
+// ======================================
+
+// # IMPORT DATABASE CONNECTION FILE
 const db = require("./services/db");
 
 
 // ======================================
-// # HOME PAGE
+// # HOME PAGE ROUTE
 // ======================================
 
+// # GET REQUEST FOR HOME PAGE "/"
 app.get("/", async function(req, res) {
+  try {
 
-  // # CHECK IF USER IS LOGGED IN
-  if (req.session.user_id) {
+    // # CHECK IF USER IS LOGGED IN (SESSION EXISTS)
+    if (req.session.user_id) {
 
-    // # GET USER DATA FROM DATABASE
-    const user = await UserModel.getById(req.session.user_id);
+      // # GET USER FROM DATABASE USING ID
+      const user = await UserModel.getById(req.session.user_id);
 
-    // # SHOW HOME PAGE WITH USER
-    res.render("index", { user: user });
+      // # RENDER HOME PAGE AND PASS USER DATA
+      res.render("index", { user });
 
-  } else {
+    } else {
 
-    // # IF NOT LOGGED IN → GO TO LOGIN PAGE
-    res.redirect("/login");
+      // # IF NOT LOGGED IN → REDIRECT TO LOGIN
+      res.redirect("/login");
+    }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
   }
-
 });
 
 
 // ======================================
-// # LOGIN SYSTEM
+// # LOGIN ROUTES
 // ======================================
 
 // # SHOW LOGIN PAGE
-// Gets all users and displays dropdown
 app.get("/login", async function(req, res) {
+  try {
 
-  const users = await UserModel.getAll();
+    // # GET ALL USERS FROM DATABASE
+    const users = await UserModel.getAll();
 
-  // # SEND USERS TO LOGIN PAGE
-  res.render("login", { users });
+    // # RENDER LOGIN PAGE WITH USERS LIST
+    res.render("login", { users });
 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
-
-// # HANDLE LOGIN
-// Takes selected user and saves in session
+// # HANDLE LOGIN FORM SUBMISSION
 app.post("/login", function(req, res) {
 
+  // # GET USER ID FROM FORM
   const userId = req.body.user_id;
 
-  // # STORE USER ID IN SESSION
+  // # SAVE USER ID IN SESSION
   req.session.user_id = userId;
 
-  // # REDIRECT TO HOME
+  // # REDIRECT TO HOME PAGE
   res.redirect("/");
 });
 
-
-// # LOGOUT
-// Removes session (logs user out)
+// # LOGOUT ROUTE
 app.get("/logout", function(req, res) {
 
+  // # DESTROY SESSION (LOG OUT USER)
   req.session.destroy();
 
+  // # REDIRECT TO LOGIN PAGE
   res.redirect("/login");
 });
 
 
 // ======================================
-// # USERS
+// # DATABASE TEST ROUTE
+// ======================================
+
+// # TEST IF DATABASE CONNECTION WORKS
+app.get("/db_test", async function(req, res) {
+  try {
+
+    // # GET TEST DATA FROM DATABASE
+    const results = await TestModel.getAll();
+
+    // # DISPLAY RESULTS
+    res.render("db_test", { results });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+
+
+// ======================================
+// # USERS ROUTES
 // ======================================
 
 // # SHOW ALL USERS
 app.get("/users", async function(req, res) {
+  try {
 
-  const users = await UserModel.getAll();
+    // # GET USERS FROM DATABASE
+    const users = await UserModel.getAll();
 
-  res.render("users", { users });
+    // # RENDER USERS PAGE
+    res.render("users", { users });
 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
-
-// # USER PROFILE
+// # SHOW SINGLE USER PROFILE
 app.get("/users/:id", async function(req, res) {
+  try {
 
-  const user = await UserModel.getById(req.params.id);
+    // # GET USER BY ID FROM URL
+    const user = await UserModel.getById(req.params.id);
 
-  res.render("profile", { user });
+    // # CHECK IF USER EXISTS
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
 
+    // # SHOW PROFILE PAGE
+    res.render("profile", { user });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
 
 // ======================================
-// # SESSIONS
+// # STUDY SESSIONS ROUTES
 // ======================================
 
 // # SHOW ALL SESSIONS
 app.get("/sessions", async function(req, res) {
+  try {
 
-  const sql = `
-    SELECT sessions.id, sessions.title, sessions.rating, categories.name AS category
-    FROM sessions
-    JOIN categories ON sessions.category_id = categories.id
-  `;
+    // # SQL QUERY TO JOIN SESSIONS + CATEGORIES
+    const sql = `
+      SELECT sessions.id, sessions.title, sessions.rating, categories.name AS category
+      FROM sessions
+      JOIN categories ON sessions.category_id = categories.id
+    `;
 
-  const sessions = await db.query(sql);
+    // # RUN QUERY
+    const sessions = await db.query(sql);
 
-  res.render("sessions", { sessions });
+    // # RENDER PAGE
+    res.render("sessions", { sessions });
 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
-
-// # SINGLE SESSION PAGE
+// # SHOW SINGLE SESSION
 app.get("/sessions/:id", async function(req, res) {
+  try {
 
-  const sql = `
-    SELECT sessions.title, sessions.rating, categories.name AS category
-    FROM sessions
-    JOIN categories ON sessions.category_id = categories.id
-    WHERE sessions.id = ?
-  `;
+    const sql = `
+      SELECT sessions.title, sessions.rating, sessions.description, categories.name AS category
+      FROM sessions
+      JOIN categories ON sessions.category_id = categories.id
+      WHERE sessions.id = ?
+    `;
 
-  const result = await db.query(sql, [req.params.id]);
+    // # RUN QUERY WITH ID
+    const result = await db.query(sql, [req.params.id]);
 
-  const session = result[0];
+    // # GET FIRST RESULT
+    const session = result[0];
 
-  res.render("session", { session });
+    if (!session) {
+      return res.status(404).send("Session not found");
+    }
 
+    res.render("session", { session });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
 
 // ======================================
-// # MESSAGES
+// # MESSAGING ROUTES
 // ======================================
 
-// # SHOW MESSAGES
+// # SHOW ALL MESSAGES
 app.get("/messages", async function(req, res) {
+  try {
 
-  const sql = `
-    SELECT 
-      messages.id,
-      sender.name AS sender_name,
-      receiver.name AS receiver_name,
-      messages.message_text
-    FROM messages
-    JOIN users AS sender ON messages.sender_id = sender.id
-    JOIN users AS receiver ON messages.receiver_id = receiver.id
-  `;
+    const sql = `
+      SELECT 
+        messages.id,
+        sender.name AS sender_name,
+        receiver.name AS receiver_name,
+        messages.message_text
+      FROM messages
+      JOIN users AS sender ON messages.sender_id = sender.id
+      JOIN users AS receiver ON messages.receiver_id = receiver.id
+      ORDER BY messages.id DESC
+    `;
 
-  const messages = await db.query(sql);
+    // # GET MESSAGES
+    const messages = await db.query(sql);
 
-  res.render("messages", { messages });
+    // # GET USERS FOR DROPDOWN
+    const users = await UserModel.getAll();
 
+    // # SHOW PAGE
+    res.render("messages", { messages, users });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
 
 // # SEND MESSAGE
 app.post("/messages", async function(req, res) {
+  try {
 
-  const { sender_id, receiver_id, message_text } = req.body;
+    const { sender_id, receiver_id, message_text } = req.body;
 
-  const sql = `
-    INSERT INTO messages (sender_id, receiver_id, message_text)
-    VALUES (?, ?, ?)
-  `;
+    // # VALIDATION: EMPTY MESSAGE
+    if (!message_text || message_text.trim() === "") {
+      return res.send("Message cannot be empty");
+    }
 
-  await db.query(sql, [sender_id, receiver_id, message_text]);
+    // # VALIDATION: MESSAGE LENGTH
+    if (message_text.length > 200) {
+      return res.send("Message too long");
+    }
 
-  res.redirect("/messages");
+    // # INSERT MESSAGE INTO DATABASE
+    const sql = `
+      INSERT INTO messages (sender_id, receiver_id, message_text)
+      VALUES (?, ?, ?)
+    `;
 
+    await db.query(sql, [sender_id, receiver_id, message_text]);
+
+    // # REDIRECT BACK TO MESSAGES PAGE
+    res.redirect("/messages");
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 
 
 // ======================================
-// # START SERVER
+// # SERVER START
 // ======================================
 
+// # START SERVER ON PORT 3000
 app.listen(3000, function() {
   console.log("Server running at http://127.0.0.1:3000/");
 });
-
-
-
-
-
 

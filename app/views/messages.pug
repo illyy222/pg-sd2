@@ -6,49 +6,62 @@ html
     link(rel="stylesheet", href="/style.css")
 
   body
+    //- # PAGE TITLE
     h1 💬 Messages
 
-    //- # SEND MESSAGE FORM
+    //- # ETHICAL NOTE (respectful communication)
+    p Please use respectful communication when messaging other users.
+
+    //- # MESSAGE FORM SECTION
     .card
       h2 Send a Message
 
+      //- # FORM THAT SENDS DATA TO /messages (POST)
       form(method="POST" action="/messages")
+
+        //- # SENDER DROPDOWN
         p
           label(for="sender_id") From:
           br
           select(name="sender_id" required)
-            option(value="1") Ilhan Mohamed
-            option(value="2") Sabrin Saed
-            option(value="3") Huda Abi
-            option(value="4") Amina Aden
+            //- # LOOP USERS FOR SENDER OPTIONS
+            each user in users
+              option(value=user.id)= user.name
 
+        //- # RECEIVER DROPDOWN
         p
           label(for="receiver_id") To:
           br
           select(name="receiver_id" required)
-            option(value="1") Ilhan Mohamed
-            option(value="2") Sabrin Saed
-            option(value="3") Huda Abi
-            option(value="4") Amina Aden
+            each user in users
+              option(value=user.id)= user.name
 
+        //- # MESSAGE INPUT
         p
           label(for="message_text") Message:
           br
           textarea(name="message_text" rows="4" cols="40" required)
 
+        //- # SUBMIT BUTTON
         br
         button(type="submit") Send Message
 
-    //- # SHOW ALL MESSAGES
+    //- # DISPLAY ALL MESSAGES
     each message in messages
+
+      //- # MESSAGE CARD
       .card
+        //- # SHOW WHO SENT TO WHO
         p 💌 #{message.sender_name} → #{message.receiver_name}
+
+        //- # SHOW MESSAGE TEXT
         p "#{message.message_text}"
 
+    //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
-
     
+
 
 
 

@@ -6,14 +6,19 @@ html
     link(rel="stylesheet", href="/style.css")
 
   body
+    //- # PAGE TITLE
     h1 💗 Login to Study Circle
 
+    //- # LOGIN FORM CARD
     .card
       form(method="POST" action="/login")
+
+        //- # LABEL FOR USER SELECT
         label(for="user_id") Select User:
         br
         br
 
+        //- # DROPDOWN OF USERS
         select(name="user_id" required)
           each user in users
             option(value=user.id)= user.name
@@ -21,6 +26,9 @@ html
         br
         br
 
+        //- # LOGIN BUTTON
         button(type="submit") Login
 
         
+
+
