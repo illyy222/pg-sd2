@@ -1,27 +1,34 @@
-//- # SESSIONS PAGE
+//- ======================================
+//- # SESSIONS PAGE (LIST VIEW)
+//- ======================================
+
 doctype html
 html
   head
     //- # PAGE TITLE
     title Study Sessions
 
-    //- # LINK CSS FILE
+    //- # LOAD CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
     //- # MAIN HEADING
     h1 📚 Study Sessions
 
-    //- # LOOP THROUGH ALL SESSIONS
+    //- # LOOP THROUGH ALL SESSIONS FROM DATABASE
     each session in sessions
       .card
-        //- # SESSION TITLE
+        //- # DISPLAY SESSION TITLE
         h2 #{session.title}
 
-        //- # SESSION CATEGORY
+        //- # DISPLAY SESSION CATEGORY
         p 💖 Category: #{session.category}
 
-        //- # SHOW CURRENT RATING
+        //- # NEW FEATURE: LINK SESSION TO USERS (FILTER BY SKILL)
+        //- Clicking this takes user to filtered users page
+        a(href=`/users?skill=${session.category}`) 👤 Find study partners
+
+        //- # DISPLAY STAR RATING
         if session.rating == 5
           p ⭐⭐⭐⭐⭐
         else if session.rating == 4
@@ -33,12 +40,14 @@ html
         else
           p ⭐
 
-        //- # LINK TO SESSION DETAILS PAGE
+        //- # LINK TO SINGLE SESSION DETAILS PAGE
         a(href=`/sessions/${session.id}`) 🔍 View Details
 
-    //- # BACK BUTTON
+    //- # BACK BUTTON TO HOME PAGE
     br
     a(href="/") ⬅ Back Home
+
+    
     
 
 

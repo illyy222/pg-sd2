@@ -1,33 +1,45 @@
-//- # USERS PAGE
+//- # USERS PAGE TEMPLATE
 doctype html
 html
   head
-    //- # PAGE TITLE
+    //- # PAGE TITLE (shows in browser tab)
     title Study Partners
 
-    //- # LINK CSS FILE
+    //- # LINK TO CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- # MAIN PAGE HEADING
+    //- # MAIN HEADING
     h1 👩‍🎓 Study Partners
 
-    //- # PRIVACY NOTE
+    //- # PRIVACY MESSAGE
     p This page only shows basic user information for study support purposes.
 
-    //- # LOOP THROUGH ALL USERS
-    each user in users
-      .card
-        //- # SHOW USER NAME
-        p #{user.name}
+    //- # SEARCH FORM (filters users by skill)
+    form(action="/users" method="GET")
+      input(type="text" name="skill" placeholder="Search by skill e.g. Java")
+      button(type="submit") Search
 
-        //- # SHOW USER SKILLS
-        p 🧠 Good at: #{user.skills}
+    //- # CHECK IF ANY USERS FOUND
+    if users.length === 0
+      //- # SHOW MESSAGE IF NO RESULTS
+      p ❌ No users found for this skill.
+    else
+      //- # LOOP THROUGH USERS FROM DATABASE
+      each user in users
+        .card
+          //- # DISPLAY USER NAME
+          p #{user.name}
 
-        //- # LINK TO PROFILE PAGE
-        a(href=`/users/${user.id}`) View Profile
+          //- # DISPLAY USER SKILLS (FROM DATABASE NOW)
+          p 🧠 Good at: #{user.skills}
 
-    //- # BACK BUTTON
+          //- # LINK TO INDIVIDUAL PROFILE PAGE
+          a(href=`/users/${user.id}`) View Profile
+
+    //- # BACK BUTTON TO HOME PAGE
     br
     a(href="/") ⬅ Back Home
+
+    
     

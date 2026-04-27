@@ -1,85 +1,34 @@
 // # IMPORT DATABASE CONNECTION
 const db = require("../services/db");
 
-// # USER MODEL CLASS
+// # USER MODEL CLASS (handles all user data)
 class UserModel {
 
-  // # GET ALL USERS
+  // # GET ALL USERS FROM DATABASE
   static async getAll() {
-    // # SQL QUERY TO GET ALL USERS
+    // # SQL QUERY TO FETCH ALL USERS (INCLUDING SKILLS)
     const sql = "SELECT * FROM users";
 
-    // # RUN QUERY
+    // # EXECUTE QUERY
     const users = await db.query(sql);
 
-    // # ADD SKILLS TO EACH USER
-    users.forEach(user => {
-      if (user.name === "Ilhan Mohamed") {
-        user.skills = "Referencing, Essay Structure, Study Support";
-      } else if (user.name === "Sabrin Saed") {
-        user.skills = "Java, Programming Support";
-      } else if (user.name === "Huda Abi") {
-        user.skills = "Essay Review, Academic Writing";
-      } else if (user.name === "Amina Aden") {
-        user.skills = "Proofreading, Study Advice";
-      } else if (user.name === "Aisha Mohamed") {
-        user.skills = "Group Study, Referencing";
-      } else if (user.name === "Noah Smith") {
-        user.skills = "Java, Coding Basics";
-      } else if (user.name === "Ayah Hadid") {
-        user.skills = "Referencing, Coursework Help";
-      } else if (user.name === "Malik Khan") {
-        user.skills = "Revision Support, Programming";
-      } else {
-        user.skills = "General Study Support";
-      }
-    });
-
-    // # RETURN USERS
+    // # RETURN RESULT TO CONTROLLER
     return users;
   }
 
-  // # GET ONE USER BY ID
+  // # GET SINGLE USER BY ID
   static async getById(id) {
-    // # SQL QUERY TO GET ONE USER
+    // # SQL QUERY TO FIND USER BY ID
     const sql = "SELECT * FROM users WHERE id = ?";
 
-    // # RUN QUERY WITH ID
+    // # EXECUTE QUERY WITH PARAMETER
     const results = await db.query(sql, [id]);
 
-    // # GET FIRST RESULT
-    const user = results[0];
-
-    // # ADD SKILLS TO SINGLE USER
-    if (user) {
-      if (user.name === "Ilhan Mohamed") {
-        user.skills = "Referencing, Essay Structure, Study Support";
-      } else if (user.name === "Sabrin Saed") {
-        user.skills = "Java, Programming Support";
-      } else if (user.name === "Huda Abi") {
-        user.skills = "Essay Review, Academic Writing";
-      } else if (user.name === "Amina Aden") {
-        user.skills = "Proofreading, Study Advice";
-      } else if (user.name === "Aisha Mohamed") {
-        user.skills = "Group Study, Referencing";
-      } else if (user.name === "Noah Smith") {
-        user.skills = "Java, Coding Basics";
-      } else if (user.name === "Ayah Hadid") {
-        user.skills = "Referencing, Coursework Help";
-      } else if (user.name === "Malik Khan") {
-        user.skills = "Revision Support, Programming";
-      } else {
-        user.skills = "General Study Support";
-      }
-    }
-
-    // # RETURN USER
-    return user;
+    // # RETURN FIRST MATCHED USER
+    return results[0];
   }
 }
 
-// # EXPORT USER MODEL
+// # EXPORT MODEL TO USE IN ROUTES
 module.exports = UserModel;
-
-
 

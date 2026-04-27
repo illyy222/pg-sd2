@@ -1,26 +1,33 @@
-//- # SINGLE SESSION PAGE
+//- ======================================
+//- # SINGLE SESSION PAGE (DETAIL VIEW)
+//- ======================================
+
 doctype html
 html
   head
     //- # PAGE TITLE
     title Session Details
 
-    //- # LINK CSS FILE
+    //- # LOAD CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
     .card
-      //- # SESSION TITLE
+      //- # DISPLAY SESSION TITLE
       h1 📚 #{session.title}
 
-      //- # CATEGORY
+      //- # DISPLAY CATEGORY
       p 💖 Category: #{session.category}
 
-      //- # DESCRIPTION IF IT EXISTS
+      //- # NEW FEATURE: LINK SESSION TO MATCHING USERS
+      //- Helps user find study partners directly
+      a(href=`/users?skill=${session.category}`) 👤 Find study partners for this session
+
+      //- # SHOW DESCRIPTION IF AVAILABLE
       if session.description
         p #{session.description}
 
-      //- # SHOW CURRENT RATING WITH STARS
+      //- # DISPLAY RATING WITH TEXT + STARS
       if session.rating == 5
         p ⭐⭐⭐⭐⭐
         p 💕 Excellent
@@ -37,8 +44,7 @@ html
         p ⭐
         p ❌ Poor
 
-      //- # SIMPLE RATING FORM
-      //- This allows users to submit a new rating
+      //- # RATING FORM (USER CAN SUBMIT RATING)
       form(method="POST" action=`/sessions/${session.id}/rate`)
         label(for="rating") Rate this session:
         br
@@ -52,9 +58,12 @@ html
         br
         button(type="submit") Submit Rating
 
-      //- # BACK BUTTON
+      //- # BACK BUTTON TO SESSIONS PAGE
       br
       a(href="/sessions") ⬅ Back to Sessions
+
+      
+      
       
 
 
