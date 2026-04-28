@@ -1,3 +1,4 @@
+
 // ======================================
 // # IMPORT EXPRESS (server framework)
 // ======================================
@@ -47,14 +48,12 @@ const db = require("./services/db");
 // ======================================
 app.get("/", async function(req, res) {
   try {
-    let user = null; // # default (not logged in)
+    let user = null; // # default if not logged in
 
-    // # if user is logged in → get their details
     if (req.session.user_id) {
       user = await UserModel.getById(req.session.user_id);
     }
 
-    // # render homepage
     res.render("index", { user });
 
   } catch (err) {
@@ -82,13 +81,13 @@ app.get("/login", async function(req, res) {
 // # HANDLE LOGIN
 app.post("/login", function(req, res) {
   req.session.user_id = req.body.user_id; // # save user in session
-  res.redirect("/"); // # go homepage
+  res.redirect("/");
 });
 
 // # LOGOUT
 app.get("/logout", function(req, res) {
   req.session.destroy(); // # remove session
-  res.redirect("/"); // # back home
+  res.redirect("/");
 });
 
 // ======================================
@@ -109,14 +108,13 @@ app.get("/db_test", async function(req, res) {
 // # USERS ROUTES
 // ======================================
 
-// # SHOW USERS (WITH SEARCH)
+// # SHOW USERS WITH OPTIONAL SKILL SEARCH
 app.get("/users", async function(req, res) {
   try {
     const skill = req.query.skill; // # get search input
 
     let users = await UserModel.getAll(); // # get all users
 
-    // # filter users by skill
     if (skill && skill.trim() !== "") {
       users = users.filter(user =>
         user.skills &&
@@ -202,7 +200,6 @@ app.post("/sessions/:id/rate", async function(req, res) {
     const sessionId = req.params.id;
     const rating = parseInt(req.body.rating);
 
-    // # validation
     if (!rating || rating < 1 || rating > 5) {
       return res.send("Invalid rating");
     }
@@ -224,27 +221,31 @@ app.post("/sessions/:id/rate", async function(req, res) {
 });
 
 // ======================================
-// # BOOK SESSION FEATURE (NEW)
+// # BOOK SESSION FEATURE
 // ======================================
+
+// # USER CAN BOOK A SESSION
 app.get("/sessions/:id/book", async function(req, res) {
   try {
-    // # must be logged in
+    // # CHECK USER IS LOGGED IN
     if (!req.session.user_id) {
       return res.redirect("/login");
     }
 
+    // # GET SESSION ID FROM URL
     const sessionId = req.params.id;
 
-    // # get session info
+    // # GET SESSION INFO FROM DATABASE
     const sql = `SELECT id, title FROM sessions WHERE id = ?`;
     const result = await db.query(sql, [sessionId]);
     const session = result[0];
 
+    // # IF SESSION DOES NOT EXIST
     if (!session) {
       return res.status(404).send("Session not found");
     }
 
-    // # show confirmation page
+    // # SHOW BOOKING CONFIRMATION PAGE
     res.render("booking", { session });
 
   } catch (err) {
@@ -260,6 +261,16 @@ app.get("/sessions/:id/book", async function(req, res) {
 // # SHOW MESSAGES PAGE
 app.get("/messages", async function(req, res) {
   try {
+    // # CHECK USER IS LOGGED IN
+    if (!req.session.user_id) {
+      return res.redirect("/login");
+    }
+
+    // # GET LOGGED-IN USER ID
+    const loggedInUserId = req.session.user_id;
+
+    // # GET ONLY MESSAGES WHERE LOGGED-IN USER IS SENDER OR RECEIVER
+    // # This improves privacy because users only see their own conversations
     const sql = `
       SELECT 
         messages.id,
@@ -269,16 +280,20 @@ app.get("/messages", async function(req, res) {
       FROM messages
       JOIN users AS sender ON messages.sender_id = sender.id
       JOIN users AS receiver ON messages.receiver_id = receiver.id
+      WHERE messages.sender_id = ? OR messages.receiver_id = ?
       ORDER BY messages.id DESC
     `;
 
-    const messages = await db.query(sql);
+    // # RUN QUERY WITH LOGGED-IN USER ID TWICE
+    const messages = await db.query(sql, [loggedInUserId, loggedInUserId]);
 
+    // # GET USERS FOR RECEIVER DROPDOWN
     let users = await UserModel.getAll();
 
     // # REMOVE LOGGED-IN USER FROM DROPDOWN
-    users = users.filter(user => user.id != req.session.user_id);
+    users = users.filter(user => user.id != loggedInUserId);
 
+    // # RENDER MESSAGES PAGE
     res.render("messages", { messages, users });
 
   } catch (err) {
@@ -290,29 +305,33 @@ app.get("/messages", async function(req, res) {
 // # SEND MESSAGE
 app.post("/messages", async function(req, res) {
   try {
+    // # GET LOGGED-IN USER AS SENDER
     const sender_id = req.session.user_id;
+
+    // # GET RECEIVER AND MESSAGE FROM FORM
     const { receiver_id, message_text } = req.body;
 
-    // # must be logged in
+    // # CHECK USER IS LOGGED IN
     if (!sender_id) {
       return res.redirect("/login");
     }
 
-    // # prevent self messaging
+    // # PREVENT SELF MESSAGING
     if (sender_id == receiver_id) {
       return res.send("You cannot message yourself");
     }
 
-    // # validation
+    // # VALIDATION: MESSAGE CANNOT BE EMPTY
     if (!message_text || message_text.trim() === "") {
       return res.send("Message cannot be empty");
     }
 
+    // # VALIDATION: MESSAGE LENGTH LIMIT
     if (message_text.length > 200) {
       return res.send("Message too long");
     }
 
-    // # insert message into DB
+    // # SAVE MESSAGE TO DATABASE
     const sql = `
       INSERT INTO messages (sender_id, receiver_id, message_text)
       VALUES (?, ?, ?)
@@ -320,6 +339,7 @@ app.post("/messages", async function(req, res) {
 
     await db.query(sql, [sender_id, receiver_id, message_text]);
 
+    // # REDIRECT BACK TO MESSAGES PAGE
     res.redirect("/messages");
 
   } catch (err) {
@@ -334,3 +354,4 @@ app.post("/messages", async function(req, res) {
 app.listen(3000, function() {
   console.log("Server running at http://127.0.0.1:3000/");
 });
+
