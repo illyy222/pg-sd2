@@ -1,0 +1,34 @@
+//- ======================================
+//- # BOOKING CONFIRMATION PAGE
+//- ======================================
+
+doctype html
+html
+  head
+    //- # PAGE TITLE
+    title Booking Confirmed
+
+    //- # LOAD CSS FILE
+    link(rel="stylesheet", href="/style.css")
+
+  body
+    .card
+      //- # CONFIRMATION TITLE
+      h1 ✅ Booking Confirmed
+
+      //- # SHOW BOOKED SESSION NAME
+      p You have successfully booked:
+
+      h2 📚 #{session.title}
+
+      //- # EXPLANATION TEXT
+      p This confirms that the logged-in user has selected this study session.
+
+      //- # NAVIGATION BUTTONS
+      br
+      a(href="/sessions") ⬅ Back to Sessions
+
+      br
+      br
+      a(href="/messages") 💬 Message a study partner
+      

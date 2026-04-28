@@ -24,6 +24,14 @@ html
       p(style="text-align:center")
         a(href="/logout") Logout
 
+    else
+      //- # IF USER IS NOT LOGGED IN
+      p(style="text-align:center") You are not logged in
+
+      //- # LOGIN BUTTON
+      p(style="text-align:center")
+        a(href="/login") Login
+
     //- # DESCRIPTION TEXT
     p(style="text-align:center") Helping students connect and support each other 💫
 
@@ -36,5 +44,7 @@ html
 
     .card
       a(href="/messages") 💬 View Messages
+
+      
       
 

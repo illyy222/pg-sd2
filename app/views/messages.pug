@@ -5,27 +5,23 @@
 doctype html
 html
   head
-    //- # PAGE TITLE (browser tab)
+    //- # PAGE TITLE
     title Messages
 
-    //- # LINK CSS STYLING
+    //- # LINK CSS FILE
     link(rel="stylesheet", href="/style.css")
 
   body
-    //- ======================================
-    //- # PAGE HEADER
-    //- ======================================
-
     //- # MAIN TITLE
     h1 💬 Messages
 
-    //- # EXPLANATION OF FEATURE
+    //- # EXPLANATION TEXT
     p Users can message each other after identifying relevant study support based on user skills.
 
-    //- # ETHICAL NOTE (GOOD FOR MARKS)
+    //- # ETHICAL NOTE
     p Please use respectful communication when messaging other users.
 
-    //- # VALIDATION NOTE (SHOWS SECURITY AWARENESS)
+    //- # VALIDATION NOTE
     p Messages are validated to help prevent spam or misuse.
 
     //- ======================================
@@ -35,62 +31,56 @@ html
     .card
       h2 Send a Message
 
-      //- # FORM SENDS DATA TO BACKEND ROUTE /messages
+      //- # FORM SENDS MESSAGE DATA TO /messages
       form(method="POST" action="/messages")
 
-        //- # SENDER DROPDOWN (WHO IS SENDING)
-        p
-          label(for="sender_id") From:
-          br
-          select(name="sender_id" required)
-            each user in users
-              option(value=user.id)= user.name
+        //- # SENDER IS AUTOMATICALLY THE LOGGED-IN USER
+        //- # This prevents users pretending to be someone else
+        p From: You
 
-        //- # RECEIVER DROPDOWN (WHO RECEIVES MESSAGE)
+        //- # RECEIVER DROPDOWN
+        //- # User chooses who they want to message
         p
           label(for="receiver_id") To:
           br
           select(name="receiver_id" required)
-            //- # DEFAULT OPTION (FORCES USER TO CHOOSE)
             option(value="") -- Select a user --
             each user in users
               option(value=user.id)= user.name
 
-        //- # MESSAGE INPUT BOX
+        //- # MESSAGE BOX
+        //- # User writes the message here
         p
           label(for="message_text") Message:
           br
           textarea(name="message_text" rows="4" cols="40" required)
 
-        //- # SUBMIT BUTTON (SEND MESSAGE)
+        //- # SEND BUTTON
         br
         button(type="submit") Send Message
 
     //- ======================================
-    //- # DISPLAY MESSAGES
+    //- # DISPLAY ALL MESSAGES
     //- ======================================
 
-    //- # CHECK IF ANY MESSAGES EXIST
+    //- # IF THERE ARE NO MESSAGES
     if messages.length === 0
-      //- # SHOW MESSAGE IF EMPTY
       p No messages yet.
     else
-      //- # LOOP THROUGH ALL MESSAGES FROM DATABASE
+      //- # LOOP THROUGH MESSAGES FROM DATABASE
       each message in messages
         .card
-          //- # SHOW SENDER AND RECEIVER
+          //- # SHOW WHO SENT MESSAGE TO WHO
           p 💌 #{message.sender_name} → #{message.receiver_name}
 
-          //- # SHOW MESSAGE CONTENT
+          //- # SHOW MESSAGE TEXT
           p "#{message.message_text}"
 
-    //- ======================================
-    //- # NAVIGATION
-    //- ======================================
-
-    //- # BACK TO HOME PAGE
+    //- # BACK BUTTON
     br
     a(href="/") ⬅ Back Home
 
     
+
+
     

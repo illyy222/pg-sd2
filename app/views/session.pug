@@ -19,9 +19,11 @@ html
       //- # DISPLAY CATEGORY
       p 💖 Category: #{session.category}
 
-      //- # NEW FEATURE: LINK SESSION TO MATCHING USERS
-      //- Helps user find study partners directly
+      //- # FIND USERS BASED ON SKILL
       a(href=`/users?skill=${session.category}`) 👤 Find study partners for this session
+
+      //- # BOOK SESSION BUTTON (NEW FEATURE)
+      a(href=`/sessions/${session.id}/book`) 📅 Book this session
 
       //- # SHOW DESCRIPTION IF AVAILABLE
       if session.description
@@ -58,11 +60,12 @@ html
         br
         button(type="submit") Submit Rating
 
-      //- # BACK BUTTON TO SESSIONS PAGE
+      //- # BACK BUTTON
       br
       a(href="/sessions") ⬅ Back to Sessions
-
       
+
+
       
       
 
